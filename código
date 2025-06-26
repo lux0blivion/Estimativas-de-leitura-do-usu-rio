@@ -1,0 +1,98 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# Funções principais
+
+def mensagem_boas_vindas(nome, idade, cidade, estado):
+    if idade < 18:
+        msg = "É ótimo ver jovens interessados na leitura!"
+    elif idade < 60:
+        msg = "Parabéns por continuar cultivando o hábito da leitura!"
+    else:
+        msg = "É inspirador ver sua dedicação à leitura!"
+    return f"Olá, {nome}! Seja bem-vindo(a)!\n{msg}\nSua jornada literária em {cidade}, {estado} será incrível!"
+
+def estimativa_livros_futuros(livros_digitais, livros_fisicos):
+    total_atual = livros_digitais + livros_fisicos
+    total_futuro = total_atual * 5
+    if total_atual >= 20:
+        feedback = "Você está lendo muito bem! Mantenha esse ritmo incrível! 📚"
+    elif total_atual >= 10:
+        feedback = "Bom trabalho! Que tal tentar ler um pouco mais esse ano?"
+    else:
+        feedback = "Você pode aumentar esse número com pequenas mudanças de hábito."
+    return f"Estimativa de livros em 5 anos: {total_futuro}\n{feedback}"
+
+def estimar_tempo_anual(horas_por_semana, tipo):
+    horas_anuais = horas_por_semana * 52
+    return f"Você dedica cerca de {horas_anuais:.1f} horas por ano à leitura para {tipo}."
+
+def recomendar_leitura(preferencia, idade):
+    if preferencia.lower() == "digital":
+        if idade < 30:
+            return "Tente explorar eBooks interativos ou audiobooks também!"
+        else:
+            return "O Kindle é ótimo, mas que tal experimentar alguns livros físicos também?"
+    else:
+        return "Ler livros físicos é maravilhoso! Mas eBooks podem ser práticos em viagens."
+
+def equilibrio_leitura(horas_estudo, horas_lazer):
+    if horas_estudo > horas_lazer:
+        return "Você dedica mais tempo aos estudos do que ao lazer. Tente equilibrar."
+    elif horas_estudo < horas_lazer:
+        return "Legal! Você lê mais por lazer. Isso é ótimo para manter o hábito leve."
+    else:
+        return "Perfeito! Seu tempo está bem equilibrado entre estudo e diversão."
+
+# Função chamada ao clicar no botão
+def processar_dados():
+    try:
+        nome = entry_nome.get()
+        idade = int(entry_idade.get())
+        cidade = entry_cidade.get()
+        estado = entry_estado.get()
+        livros_digitais = int(entry_digitais.get())
+        livros_fisicos = int(entry_fisicos.get())
+        preferencia = entry_preferencia.get()
+        horas_estudo = float(entry_estudo.get())
+        horas_lazer = float(entry_lazer.get())
+        genero = entry_genero.get()
+
+        mensagem = mensagem_boas_vindas(nome, idade, cidade, estado)
+        estimativa = estimativa_livros_futuros(livros_digitais, livros_fisicos)
+        estudo = estimar_tempo_anual(horas_estudo, "estudo")
+        lazer = estimar_tempo_anual(horas_lazer, "entretenimento")
+        recomendacao = recomendar_leitura(preferencia, idade)
+        equilibrio = equilibrio_leitura(horas_estudo, horas_lazer)
+
+        resultado = f"{mensagem}\n\n{estimativa}\n\n{estudo}\n{lazer}\n\n{recomendacao}\n{equilibrio}\n\nContinue lendo seus livros de {genero}, {nome}! 📖✨"
+        messagebox.showinfo("Relatório de Leitura", resultado)
+    except ValueError:
+        messagebox.showerror("Erro", "Verifique se todos os campos numéricos estão corretos.")
+
+# Interface Tkinter
+root = tk.Tk()
+root.title("Hábitos de Leitura")
+root.geometry("400x600")
+
+labels = [
+    "Nome", "Idade", "Cidade", "Estado",
+    "Livros digitais (último ano)", "Livros físicos (último ano)",
+    "Preferência (Digital ou Física)", "Horas semanais de estudo",
+    "Horas semanais de lazer", "Gênero literário favorito"
+]
+
+entries = []
+for label in labels:
+    tk.Label(root, text=label).pack()
+    entry = tk.Entry(root)
+    entry.pack(pady=2)
+    entries.append(entry)
+
+(entry_nome, entry_idade, entry_cidade, entry_estado,
+ entry_digitais, entry_fisicos, entry_preferencia,
+ entry_estudo, entry_lazer, entry_genero) = entries
+
+tk.Button(root, text="Gerar Relatório", command=processar_dados).pack(pady=20)
+
+root.mainloop()
